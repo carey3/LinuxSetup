@@ -1,0 +1,22 @@
+# remove any interactive crap some companies put on these commands
+unalias rm
+unalias cp 
+unalias mv
+# aliases I find useful.  Too many and it gets hard to remember them all.
+alias a "alias"
+a xt  "xterm -fa monospace -rightbar -sb -fg wheat -bg black -fs 12 -geom 130x40+0+50 -sl 1000&"
+a xt1 "xterm -fa monospace -rightbar -sb -fg cyan  -bg black -fs 12 -geom 130x40+0+50 -sl 1000&"
+a h history
+a grep 'grep --color'
+a ls 'ls --color'
+a l  'ls -alFtr'
+a ll 'ls -al'
+a cls 'tput clear'
+a psg '/bin/ps -ef | grep \!* | grep -v grep' 
+a l1 'ls -1 \!* | grep -v "~"'      #remove backup files
+a ld 'ls -alFtr \!* | grep "drwx"'  # directories
+a lg 'ls -alFtr | grep "\!*"'       # grep the ls
+a ..   'cd ..'
+a . 'source \!*'
+a dbvis 'dbvis &'
+unalias a
