@@ -1,0 +1,80 @@
+
+
+umask 002               # Default file permission drwxrwxr-x & -rw-rw-r--.
+
+
+if (`uname` == "Linux") then
+   set path= ( $path /usr/X11R6/bin )
+endif
+
+setenv CLASSPATH /csm/bin
+
+foreach mdir ( /usr/X11R6/man /usr/man /usr/share/man /tool/pandora64/man /tool/pandora/man )
+  if( -d $mdir ) then
+    setenv MANPATH "${MANPATH}:$mdir"
+  endif
+end
+
+# include user aliases, if any
+if (-f ~/.alias) then
+  source ~/.alias
+endif
+
+if(-e ~/.dir_colors) then
+     eval `dircolors -c ~/.dir_colors`
+endif
+
+######################################################################################
+# set any specific paths for company specific directories
+######################################################################################
+
+setenv PATH ~/bin:/usr/NX/bin:/usr/X11R6/bin:${PATH}:/bin:/usr/bin:/usr/lib:/usr/lib64
+
+if (-d /tool/cvsroot) then
+    setenv CVSROOT /tool/cvsroot
+else
+    setenv CVSROOT :pserver:$USER@gtocvs02.tapeout.cso:/tool/cvsroot
+        setenv CVS_RSH ssh
+endif
+
+## prepare for CAD EDA-tool modules
+setenv MODULEPATH /tool/eda/etc/modules
+
+# get rid of non-existing paths in PATH variable
+if (! -d /usr/local/bin) then
+  setenv PATH `echo ${PATH} | sed -e 's#/usr/local/bin##g'  -e 's/::/:/g'`
+endif
+if (! -d /usr/local/sbin) then
+  setenv PATH `echo ${PATH} | sed -e 's#/usr/local/sbin##g' -e 's/::/:/g'`
+endif
+if (! -d /usr/contrib/bin) then
+  setenv PATH `echo ${PATH} | sed -e 's#/usr/contrib/bin##g'  -e 's/::/:/g'`
+endif
+if (! -d /root/bin) then
+  setenv PATH `echo ${PATH} | sed -e 's#/root/bin##g'  -e 's/::/:/g'`
+endif
+
+# finally, clean up paths by removing duplicates
+if (-f /tool/site-config/etc/scripts/uniquify_list ) then
+    setenv PATH `/tool/site-config/etc/scripts/uniquify_list ${PATH}`
+    if ( $?LD_LIBRARY_PATH ) then
+      setenv LD_LIBRARY_PATH `/tool/site-config/etc/scripts/uniquify_list ${LD_LIBRARY_PATH}`
+    endif
+    if ( $?MANPATH ) then
+      setenv MANPATH `/tool/site-config/etc/scripts/uniquify_list ${MANPATH}`
+    endif
+endif
+
+if ( $?PERL5LIB ) then
+  setenv PERL5LIB .:${PERL5LIB}
+else
+  setenv PERL5LIB .
+endif
+
+set notify
+unset autologout                    # don't auto-logout
+set filec                           # file name completion
+set autolist                        # automatic filelist during filec
+set autocorrect                     # automatic spelling corrections
+set autoexpand                      # automatic command expansion
+
